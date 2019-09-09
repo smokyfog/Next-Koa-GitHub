@@ -11,6 +11,9 @@ export default ({ children }) => (
       <Link href='/test/ccc?id=2' as="/test/ccc/2">
         <Button>index2</Button>
       </Link>
+      <Link href='/test/b' as="/test/b">
+        <Button>index2</Button>
+      </Link>
     </header>
     { children }
   </div>

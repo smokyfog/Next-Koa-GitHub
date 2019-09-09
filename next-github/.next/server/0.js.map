@@ -1,1 +1,0 @@
-{"version":3,"file":"0.js","sources":["webpack:///./components/comp.jsx"],"sourcesContent":["import { Button } from 'antd'\r\n\r\n\r\nexport default ({children}) => <Button>{ children } lazy component</Button>"],"mappings":";;;;;;;;;;;;;;;;;;;;;;AAGA;AAAA;AAAA;;;;A","sourceRoot":""}
