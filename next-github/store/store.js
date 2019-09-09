@@ -4,13 +4,11 @@ const initialState = {
   count: 0
 }
 
-
 const ADD = 'ADD'
-
 
 function reducer(state = initialState, action) {
   console.log(state, action)
-  switch (action)  {
+  switch (action.type)  {
     case ADD: 
       return { count: state.count + 1 }
     default:
@@ -18,9 +16,17 @@ function reducer(state = initialState, action) {
   }
 }
 
-
 const store = createStore(reducer, initialState)
 
-console.log(store)
+// console.log(store)
+// console.log(store.getState())
+store.dispatch({ type: ADD })
+// console.log(store.getState())
+
+store.subscribe(() => {
+  console.log(store.getState())
+})
+
+store.dispatch({ type: ADD })
 
 export default store

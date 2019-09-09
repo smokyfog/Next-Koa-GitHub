@@ -36419,7 +36419,7 @@ function reducer() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
   console.log(state, action);
 
-  switch (action) {
+  switch (action.type) {
     case ADD:
       return {
         count: state.count + 1
@@ -36430,8 +36430,19 @@ function reducer() {
   }
 }
 
-var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, initialState);
-console.log(store);
+var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, initialState); // console.log(store)
+// console.log(store.getState())
+
+store.dispatch({
+  type: ADD
+}); // console.log(store.getState())
+
+store.subscribe(function () {
+  console.log(store.getState());
+});
+store.dispatch({
+  type: ADD
+});
 /* harmony default export */ __webpack_exports__["default"] = (store);
 
 /***/ }),
