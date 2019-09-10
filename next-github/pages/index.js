@@ -2,7 +2,8 @@ import { Button } from 'antd'
 import Link from 'next/link'
 import Router from 'next/router'
 import store from '../store/store'
-
+import { connect } from 'react-redux'
+ 
 const event = [
   'routeChageStart',
   'routeChangeComplete',
@@ -23,7 +24,7 @@ event.forEach(event => {
 })
 
 
-export default () => {
+const Index = ({ counter, username, rename, add }) => {
   function gotoTestB() {
     // Router.push('/test/bbb?id=2')
     // 或
@@ -39,12 +40,26 @@ export default () => {
       <Button onClick={ gotoTestB }>
         test b
       </Button>
-      <a>index b</a>
+      <span>Count: { counter }</span>
+      <a>username: { username }</a>
+      <br />
+      <input value={ username } onChange={(e) => {rename(e.target.value)}} />
+      <button onClick={() => add(counter)}>do add</button>
     </>
   )
 }
 
-
+export default connect(function mapStateToProps(state) {
+  return {
+    counter: state.counter.count,
+    username: state.user.username
+  }
+}, function mapDispatchToProps(dispatch) {
+  return {
+    add: (num) => dispatch({ type: 'ADD', num }),
+    rename: (name) => dispatch({ type: "UPDATE_USERNAME", name })
+  }
+})(Index)
 
 // export default () => (
 //   <Link href='test/bbb'>

@@ -1,8 +1,11 @@
 import App from 'next/app'
 import Layout from '../components/layout'
 import MyContext from '../lib/my-context'
-import { Button } from 'antd'
-
+// import { Button } from 'antd'
+import { Provider } from 'react-redux'
+import store from '../store/store'
+import testHoc from '../lib/with-redux'
+ 
 import 'antd/dist/antd.css'
 
 class MyApp extends App {
@@ -10,7 +13,7 @@ class MyApp extends App {
     context: 'value'
   }
   static async getInitialProps ({ Component, ctx }) {
-    let pageProps
+    let pageProps = {}
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx)
     }
@@ -19,16 +22,18 @@ class MyApp extends App {
     }
   }
   render() {
-    const { Component, pageProps } = this.props
+    const { Component, pageProps,reduxStore } = this.props
     return (
       <Layout>
-        <MyContext.Provider value={ this.state.context } >
-          <Component { ...pageProps } />
-          <Button onClick={() => this.setState({context: this.state.context + '111'})}>update context</Button>
-        </MyContext.Provider>
+        <Provider store={ reduxStore }>
+          <MyContext.Provider value={ this.state.context } >
+            <Component { ...pageProps } />
+            {/* <Button onClick={() => this.setState({context: this.state.context + '111'})}>update context</Button> */}
+          </MyContext.Provider>
+        </Provider>
       </Layout>
     )
   }
 }
 
-export default MyApp
+export default testHoc(MyApp)
