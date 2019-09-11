@@ -29,15 +29,19 @@ export default Comp => {
       return <Comp Component={Component}  pageProps={pageProps} {...rest}  reduxStore={this.reduxStore} />
     }
   }
-  WithReduxApp.getInitialProps = async () => {
+  WithReduxApp.getInitialProps = async ctx => {
+    const reduxStore = getOrCreateStore()
+
+    ctx.reduxStore = reduxStore
+
     let appProps = {}
     if (typeof Comp.getInitialProps === 'function') {
       appProps = await Comp.getInitialProps(ctx)
     }
-    const reduxStore = getOrCreateStore()
+
     return {
       ...appProps,
-      initialReduxState = reduxStore.getOrCreateStore
+      initialReduxState: reduxStore.getState()
     }
   }
   return WithReduxApp

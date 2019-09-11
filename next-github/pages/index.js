@@ -1,8 +1,8 @@
 import { Button } from 'antd'
-import Link from 'next/link'
 import Router from 'next/router'
-import store from '../store/store'
 import { connect } from 'react-redux'
+
+import { add } from '../store/store'
  
 const event = [
   'routeChageStart',
@@ -47,6 +47,11 @@ const Index = ({ counter, username, rename, add }) => {
       <button onClick={() => add(counter)}>do add</button>
     </>
   )
+}
+
+Index.getInitialProps = async ({ reduxStore }) => {
+  reduxStore.dispatch(add(3))
+  return {}
 }
 
 export default connect(function mapStateToProps(state) {

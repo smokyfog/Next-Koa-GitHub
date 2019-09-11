@@ -51,7 +51,7 @@ const store = createStore(
 
 // action creatore
 // 同步的dispatch
-function add(num) {
+export function add(num) {
   return {
     type: ADD,
     num
