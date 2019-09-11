@@ -6,6 +6,8 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
+let index = 0
+
 app.prepare().then(() => {
 
   const server = new Koa()
@@ -27,6 +29,8 @@ app.prepare().then(() => {
   })
 
   server.use(async (ctx, next) => {
+    ctx.cookies.set('id', index)
+    index += 1
     await handle(ctx.req, ctx.res)
     ctx.respond = false
   })
