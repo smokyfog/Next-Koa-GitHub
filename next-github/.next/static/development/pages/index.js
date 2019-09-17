@@ -2451,7 +2451,7 @@ var Index = function Index() {
 
 /***/ }),
 
-/***/ 8:
+/***/ 11:
 /*!*************************************************************************************************************************************!*\
   !*** multi next-client-pages-loader?page=%2F&absolutePagePath=d%3A%5CreactStudy%5CNext-Koa-GitHub%5Cnext-github%5Cpages%5Cindex.js ***!
   \*************************************************************************************************************************************/
@@ -2474,5 +2474,5 @@ module.exports = dll_01f9a3fa864a7b7414d8;
 
 /***/ })
 
-},[[8,"static/runtime/webpack.js"]]]);
+},[[11,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=index.js.map

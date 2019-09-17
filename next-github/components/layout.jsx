@@ -1,15 +1,36 @@
 
 import { useState, useCallback } from 'react'
-import { Button, Layout, Icon, Input, Avatar } from 'antd'
-import Link from 'next/link'
-
+import { 
+  Button, 
+  Layout, 
+  Icon, 
+  Input, 
+  Avatar, 
+  Tooltip, 
+  Dropdown, 
+  Menu 
+} from 'antd'
+import getConfig from 'next/config'
+import { connect } from 'react-redux'
 import Container from './Container'
 
+import { logout } from '../store/store'
+
 const { Header, Content, Footer } = Layout
-
 const Comp = ({ color, children, style }) => <div style={{color, ...style}}>{children}</div>
+const { publicRuntimeConfig } = getConfig()
 
-export default ({ children }) => {
+const githubIconStyle = {
+  color: 'white',
+  fontSize: 40,
+  display: 'block',
+  paddingTop: 10,
+  marginRight: 20
+}
+const footerStyle = {
+  textAlign: 'center'
+}
+function MyLayout ({ children, user, logout }) {
   const [search, setSearch] = useState('')
 
   const handleSearchChange = useCallback(
@@ -21,20 +42,24 @@ export default ({ children }) => {
 
   const handleOnSearch = useCallback(
     () => {
-      
     },
     []
+  )  
+
+  const handleLogout = useCallback(() => {
+    logout()
+  }, [])
+  
+  const userDrapDown = (
+    <Menu>
+      <Menu.Item>
+        <a href="javascript:void(0)" onClick={handleLogout}>
+          登出
+        </a>
+      </Menu.Item>
+    </Menu>
   )
-  const githubIconStyle = {
-    color: 'white',
-    fontSize: 40,
-    display: 'block',
-    paddingTop: 10,
-    marginRight: 20
-  }
-  const footerStyle = {
-    textAlign: 'center'
-  }
+
   return (
     <Layout>
       <Header>
@@ -54,7 +79,21 @@ export default ({ children }) => {
             </div>
             <div className="header-right">
               <div className="user">
-                  <Avatar size={40} icon="user"/>
+                {
+                  user && user.id ? (
+                    <Dropdown overlay={userDrapDown}>
+                      <a href="/" >
+                        <Avatar size={40} src={user.avatar_url} />
+                      </a>
+                    </Dropdown>
+                  ) : (
+                    <Tooltip title="点击进行登陆">
+                      <a  href={publicRuntimeConfig.OAUTH_URL}>
+                        <Avatar size={40} icon="user"/>
+                      </a>
+                    </Tooltip>
+                  )
+                }
               </div>
             </div>
         </Container>
@@ -96,3 +135,13 @@ export default ({ children }) => {
     </Layout>
   )
 }
+
+export default connect(function mapState(state) {
+  return {
+    user: state.user
+  }
+}, function MapReducer(dispatch) {
+  return {
+    logout: () => dispatch(logout())
+  }
+})(MyLayout)

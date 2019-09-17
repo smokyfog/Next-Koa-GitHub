@@ -27,10 +27,25 @@ export default Comp => {
         pageProps.test = '123'
       }
       return <Comp Component={Component}  pageProps={pageProps} {...rest}  reduxStore={this.reduxStore} />
-    }
+    } 
   }
   WithReduxApp.getInitialProps = async ctx => {
-    const reduxStore = getOrCreateStore()
+    let reduxStore
+
+    if (isServer) {
+      const { req } = ctx.ctx
+      const session = req.session
+
+      if (session && session.userinfo) {
+        reduxStore = getOrCreateStore({
+          user: session.userinfo
+        })
+      } else {
+        reduxStore = getOrCreateStore()
+      }
+    } else {
+      reduxStore = getOrCreateStore()
+    }
 
     ctx.reduxStore = reduxStore
 

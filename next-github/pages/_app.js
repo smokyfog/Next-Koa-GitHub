@@ -23,11 +23,11 @@ class MyApp extends App {
   render() {
     const { Component, pageProps,reduxStore } = this.props
     return (
-      <Layout>
-        <Provider store={ reduxStore }>
-            <Component { ...pageProps } />
-        </Provider>
-      </Layout>
+      <Provider store={ reduxStore }>
+        <Layout>
+          <Component { ...pageProps } />
+        </Layout>
+      </Provider>
     )
   }
 }

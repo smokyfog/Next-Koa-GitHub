@@ -31,11 +31,7 @@ app.prepare().then(() => {
     store: new RedisSessionStore(redis)
   }
 
-  
-
   server.use(session(SESSION_CONFIG, server))
-
-  
 
   // server.use(async (ctx, next) => {
   //   console.log('session is', ctx.session)
@@ -51,7 +47,6 @@ app.prepare().then(() => {
   //   ctx.respond = false
   // })
 
-
   // 配置处理github OAuth的登录
   auth(server)
   
@@ -66,8 +61,6 @@ app.prepare().then(() => {
 
   router.get('/api/user/info', async (ctx) => {
     const user = ctx.session.userinfo
-    // console.log(JSON.stringify(ctx.session) )
-    console.log(user)
     if (!user) {
       ctx.status = 401
       ctx.body = 'need login'
