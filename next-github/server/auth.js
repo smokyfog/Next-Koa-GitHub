@@ -35,7 +35,8 @@ module.exports = (server) => {
           }
         })
         ctx.session.userinfo = userInfoResp.data
-        ctx.redirect('/')
+         ctx.redirect((ctx.session && ctx.session.urlBeforeOAuth) || '/')
+          ctx.session.urlBeforeOAuth = ''
       } else {
         const errorMsg = result.data && result.data.error
         ctx.body = `request token failed ${errorMsg}`
@@ -60,6 +61,7 @@ module.exports = (server) => {
   server.use(async (ctx, next) => {
     const { path, method } = ctx
     if (path === '/prepare-auth' && method === 'GET') {
+      console.log('prepare-auth')
       const { url } = ctx.query
       ctx.session.urlBeforeOAuth = url
       ctx.redirect(config.OAUTH_URL)

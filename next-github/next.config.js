@@ -66,7 +66,7 @@ module.exports = widthCss({
   },
   // 在服务端渲染和客户端渲染都可以获取的配置
   publicRuntimeConfig: {
-    GITHUB_OAUTH_URL,
-    OAUTH_URL: `${GITHUB_OAUTH_URL}?client_id=${config.github.client_id}&scope=${SCOPE}`
+    GITHUB_OAUTH_URL: config.GITHUB_OAUTH_URL,
+    OAUTH_URL: config.OAUTH_URL
   }
 })

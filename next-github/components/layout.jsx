@@ -12,7 +12,9 @@ import {
 } from 'antd'
 import getConfig from 'next/config'
 import { connect } from 'react-redux'
+import { withRouter } from 'next/router'
 import Container from './Container'
+import axios from 'axios'
 
 import { logout } from '../store/store'
 
@@ -30,7 +32,7 @@ const githubIconStyle = {
 const footerStyle = {
   textAlign: 'center'
 }
-function MyLayout ({ children, user, logout }) {
+function MyLayout ({ children, user, logout, router }) {
   const [search, setSearch] = useState('')
 
   const handleSearchChange = useCallback(
@@ -48,6 +50,21 @@ function MyLayout ({ children, user, logout }) {
 
   const handleLogout = useCallback(() => {
     logout()
+  }, [logout])
+
+  const handleGoToAuth = useCallback((e) => {
+    e.preventDefault()
+    axios.get(`/prepare-auth?url=${router.asPath}`)
+      .then(res => {
+        if (res.status === 200) {
+          location.href = publicRuntimeConfig.OAUTH_URL
+        } else {
+          console.log('prepare auth faild', res)
+        }
+      })
+      .catch(err => {
+        console.log('prepare auth faild', err)
+      })
   }, [])
   
   const userDrapDown = (
@@ -88,7 +105,7 @@ function MyLayout ({ children, user, logout }) {
                     </Dropdown>
                   ) : (
                     <Tooltip title="点击进行登陆">
-                      <a  href={publicRuntimeConfig.OAUTH_URL}>
+                      <a  href={`/prepare-auth?url=${router.asPath}`}>
                         <Avatar size={40} icon="user"/>
                       </a>
                     </Tooltip>
@@ -144,4 +161,4 @@ export default connect(function mapState(state) {
   return {
     logout: () => dispatch(logout())
   }
-})(MyLayout)
+})(withRouter(MyLayout))
