@@ -1,22 +1,28 @@
-import getConfig from 'next/config'
+
+
+const api = require('../lib/api')
 import { useEffect } from 'react'
 import axios from 'axios'
 
-const { publicRuntimeConfig } = getConfig()
-
-const Index = () => {
-
+function Index ({ userRepos }) {
   useEffect(() => {
-    axios.get('/api/user/info').then(res => {
-      console.log(res)
-    })
-  }, [])
-  return (
-    <span>
-    index
-    <a href ={publicRuntimeConfig.OAUTH_URL}>去登陆</a>
-  </span>
+    // axios.post('/github/test', { test: 123 })
+  })
+  // console.log(userRepos)
+  return <span>Index</span>
+}
+
+Index.getInitialProps = async ({ ctx }) => {
+  const result = await api.request(
+  {
+    url: '/user/repos',
+  },
+  ctx.req,
+  ctx.res
   )
+  return {
+    userRepos: result.data
+  }
 }
 
 export default Index

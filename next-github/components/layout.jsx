@@ -8,11 +8,12 @@ import {
   Avatar, 
   Tooltip, 
   Dropdown, 
-  Menu 
+  Menu
 } from 'antd'
 import getConfig from 'next/config'
 import { connect } from 'react-redux'
-import { withRouter } from 'next/router'
+import { withRouter, Router } from 'next/router'
+import Link from 'next/link'
 import Container from './Container'
 import axios from 'axios'
 
@@ -33,7 +34,9 @@ const footerStyle = {
   textAlign: 'center'
 }
 function MyLayout ({ children, user, logout, router }) {
-  const [search, setSearch] = useState('')
+  const urlQuery = router.query && router.query.query
+
+  const [search, setSearch] = useState(urlQuery || '')
 
   const handleSearchChange = useCallback(
     event => {
@@ -42,11 +45,9 @@ function MyLayout ({ children, user, logout, router }) {
     [setSearch]
   )
 
-  const handleOnSearch = useCallback(
-    () => {
-    },
-    []
-  )  
+  const handleOnSearch = useCallback(() => {
+    router.push(`/search?query=${search}`)
+  },[search])  
 
   const handleLogout = useCallback(() => {
     logout()
@@ -70,7 +71,7 @@ function MyLayout ({ children, user, logout, router }) {
   const userDrapDown = (
     <Menu>
       <Menu.Item>
-        <a href="javascript:void(0)" onClick={handleLogout}>
+        <a onClick={handleLogout}>
           登出
         </a>
       </Menu.Item>
@@ -83,7 +84,9 @@ function MyLayout ({ children, user, logout, router }) {
           <Container renderer={<div className="header-inner"/>}>
             <div className="header-left">
               <div className="logo">
-                <Icon type="github" style={ githubIconStyle }/>
+                {/* <Link href="/"> */}
+                  <Icon type="github" style={ githubIconStyle } />
+                {/* </Link> */}
               </div>
               <div>
                 <Input.Search 
@@ -126,7 +129,7 @@ function MyLayout ({ children, user, logout, router }) {
       </Footer>
       <style jsx>{`
         .content {
-          color: red;
+          color: #000;
         }
         .header-inner {
           display: flex;
@@ -142,11 +145,14 @@ function MyLayout ({ children, user, logout, router }) {
           height: 100%;
         }
         .ant-layout {
-          height: 100%
+          min-height: 100%;
         }
         .ant-layout-header {
           padding-left: 0;
           padding-right: 0
+        }
+        .ant-layout-content {
+          background: #fff;
         }
       `}</style>
     </Layout>

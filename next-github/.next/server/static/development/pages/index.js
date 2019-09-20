@@ -88,10 +88,67 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./lib/api.js":
+/*!********************!*\
+  !*** ./lib/api.js ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+const axios = __webpack_require__(/*! axios */ "axios");
+
+const github_base_url = 'https://api.github.com';
+
+async function requestGithub(method, url, data, headers) {
+  return await axios({
+    method,
+    url: `${github_base_url}${url}`,
+    data,
+    headers
+  });
+}
+
+const isServer = true;
+
+async function request({
+  method = 'GET',
+  url,
+  data = {}
+}, req, res) {
+  if (!url) {
+    throw Error('url is provide');
+  }
+
+  if (isServer) {
+    const session = req.session;
+    const githubAuth = session.githubAuth || {};
+    const headers = {};
+
+    if (githubAuth.access_token) {
+      headers['Authorization'] = `${githubAuth.token_type} ${githubAuth.access_token}`;
+    }
+
+    return await requestGithub(method, url, data, headers);
+  } else {
+    return await axios({
+      method,
+      url: `/github${url}`,
+      data
+    });
+  }
+}
+
+module.exports = {
+  request,
+  requestGithub
+};
+
+/***/ }),
 
 /***/ "./pages/index.js":
 /*!************************!*\
@@ -104,42 +161,48 @@ module.exports =
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var next_config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/config */ "next/config");
-/* harmony import */ var next_config__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_config__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "axios");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
+const api = __webpack_require__(/*! ../lib/api */ "./lib/api.js");
 
 
-const {
-  publicRuntimeConfig
-} = next_config__WEBPACK_IMPORTED_MODULE_1___default()();
 
-const Index = () => {
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-    axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/api/user/info').then(res => {
-      console.log(res);
-    });
-  }, []);
-  return __jsx("span", null, "index", __jsx("a", {
-    href: publicRuntimeConfig.OAUTH_URL
-  }, "\u53BB\u767B\u9646"));
+
+function Index({
+  userRepos
+}) {
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {// axios.post('/github/test', { test: 123 })
+  }); // console.log(userRepos)
+
+  return __jsx("span", null, "Index");
+}
+
+Index.getInitialProps = async ({
+  ctx
+}) => {
+  const result = await api.request({
+    url: '/user/repos'
+  }, ctx.req, ctx.res);
+  return {
+    userRepos: result.data
+  };
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Index);
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! d:\reactStudy\Next-Koa-GitHub\next-github\pages\index.js */"./pages/index.js");
+module.exports = __webpack_require__(/*! D:\study\Next-Koa-GitHub\next-github\pages\index.js */"./pages/index.js");
 
 
 /***/ }),
@@ -152,17 +215,6 @@ module.exports = __webpack_require__(/*! d:\reactStudy\Next-Koa-GitHub\next-gith
 /***/ (function(module, exports) {
 
 module.exports = require("axios");
-
-/***/ }),
-
-/***/ "next/config":
-/*!******************************!*\
-  !*** external "next/config" ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("next/config");
 
 /***/ }),
 
