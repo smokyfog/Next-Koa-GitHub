@@ -6443,7 +6443,7 @@ function connect(options) {
       error.name = err.name;
       error.stack = err.stack; // __NEXT_DIST_DIR is provided by webpack
 
-      (0, _sourceMapSupport.rewriteStacktrace)(error, "D:\\study\\Next-Koa-GitHub\\next-github\\.next");
+      (0, _sourceMapSupport.rewriteStacktrace)(error, "D:\\reactStudy\\Next-Koa-GitHub\\next-github\\.next");
       return error;
     }
   };

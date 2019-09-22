@@ -67,6 +67,11 @@ function MyLayout ({ children, user, logout, router }) {
         console.log('prepare auth faild', err)
       })
   }, [])
+
+  const handleGoIndex = useCallback(() => {
+    console.log(123456)
+    router.push(`/`)
+  }, [])
   
   const userDrapDown = (
     <Menu>
@@ -83,9 +88,9 @@ function MyLayout ({ children, user, logout, router }) {
       <Header>
           <Container renderer={<div className="header-inner"/>}>
             <div className="header-left">
-              <div className="logo">
+              <div className="logo" onClick={() => handleGoIndex()}>
                 {/* <Link href="/"> */}
-                  <Icon type="github" style={ githubIconStyle } />
+                  <Icon  type="github" style={ githubIconStyle } />
                 {/* </Link> */}
               </div>
               <div>
@@ -119,7 +124,7 @@ function MyLayout ({ children, user, logout, router }) {
         </Container>
       </Header>
       <Content>
-        <Container renderer={<Comp color="red" />}>
+        <Container renderer={<Comp />}>
             { children }
         </Container>
       </Content>
